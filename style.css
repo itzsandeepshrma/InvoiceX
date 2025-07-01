@@ -1,0 +1,79 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
+  padding: 2rem;
+}
+h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+.invoice {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  max-width: 900px;
+  margin: 0 auto;
+  box-shadow: 0 0 15px rgba(0,255,255,0.2);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+th, td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+}
+input[type="text"], input[type="number"] {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: none;
+  border-bottom: 1px solid #00ffff;
+  color: #fff;
+  font-size: 1rem;
+  padding: 5px;
+  outline: none;
+}
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-bottom: 2px solid #00ffff;
+  background-color: rgba(0, 255, 255, 0.05);
+}
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+.totals {
+  text-align: right;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+.btn {
+  background: #00ffff;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+.btn:hover {
+  background: #00bfbf;
+}
+@media print {
+  .btn {
+    display: none;
+  }
+  body {
+    background: #fff;
+    color: #000;
+  }
+}
