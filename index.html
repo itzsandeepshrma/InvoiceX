@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+  <title>InvoiceX - Advanced Invoice Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <h1>InvoiceX</h1>
+
+  <div class="invoice">
+    <table id="invoiceTable">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Qty</th>
+          <th>Unit Price</th>
+          <th>Total</th>
+          <th>❌</th>
+        </tr>
+      </thead>
+      <tbody id="invoiceBody">
+        <!-- Rows will be inserted dynamically -->
+      </tbody>
+    </table>
+
+    <div class="totals">
+      Subtotal: ₹<span id="subtotal">0.00</span><br>
+      Tax (18%): ₹<span id="tax">0.00</span><br>
+      <strong>Grand Total: ₹<span id="grandTotal">0.00</span></strong>
+    </div>
+
+    <button class="btn" onclick="addRow()">➕ Add Item</button>
+    <button class="btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+    <button class="btn" onclick="resetInvoice()">🗑️ Reset</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
