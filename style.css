@@ -13,6 +13,19 @@ h1 {
   margin-bottom: 1.5rem;
   font-size: 2rem;
 }
+.footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1rem 0;
+  font-size: 0.9rem;
+  color: #ccc;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+@media print {
+  .footer {
+    display: none;
+  }
+}
 .invoice {
   background: rgba(255, 255, 255, 0.05);
   padding: 1.5rem;
