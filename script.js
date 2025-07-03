@@ -2,6 +2,7 @@ const invoiceBody = document.getElementById('invoiceBody');
 const subtotalEl = document.getElementById('subtotal');
 const taxEl = document.getElementById('tax');
 const grandTotalEl = document.getElementById('grandTotal');
+const gstInput = document.getElementById('gstRate');
 
 function addRow(item = '', qty = 1, price = 0) {
   const row = document.createElement('tr');
@@ -30,11 +31,13 @@ function calculateInvoice() {
   document.querySelectorAll('.lineTotal').forEach(td => {
     subtotal += parseFloat(td.textContent);
   });
-  const tax = subtotal * 0.18;
+  const gstRate = parseFloat(gstInput.value) || 0;
+  const tax = subtotal * (gstRate / 100);
   const grand = subtotal + tax;
   subtotalEl.textContent = subtotal.toFixed(2);
   taxEl.textContent = tax.toFixed(2);
   grandTotalEl.textContent = grand.toFixed(2);
+  saveData();
 }
 
 function deleteRow(btn) {
@@ -53,20 +56,58 @@ function saveData() {
       price: inputs[2].value
     });
   });
-  localStorage.setItem('invoiceX', JSON.stringify(rows));
+  const gstRate = gstInput.value || 18;
+  localStorage.setItem('invoiceX', JSON.stringify({ rows, gstRate }));
 }
 
 function loadData() {
-  const saved = JSON.parse(localStorage.getItem('invoiceX') || '[]');
-  saved.forEach(row => addRow(row.item, row.qty, row.price));
+  const saved = JSON.parse(localStorage.getItem('invoiceX') || '{}');
+  if (saved.rows) saved.rows.forEach(row => addRow(row.item, row.qty, row.price));
+  if (saved.gstRate) gstInput.value = saved.gstRate;
+  calculateInvoice();
 }
 
 function resetInvoice() {
-  if (confirm("Are you sure you want to clear the invoice?")) {
+  if (confirm("Clear invoice?")) {
     localStorage.removeItem('invoiceX');
     invoiceBody.innerHTML = '';
+    gstInput.value = 18;
     calculateInvoice();
   }
+}
+
+function downloadPDF() {
+  const element = document.getElementById('invoiceContent');
+  html2pdf().set({
+    margin: 0.5,
+    filename: 'InvoiceX.pdf',
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+  }).from(element).save();
+}
+
+function exportExcel() {
+  const wb = XLSX.utils.book_new();
+  const rows = [["Item", "Qty", "Price", "Total"]];
+  invoiceBody.querySelectorAll('tr').forEach(tr => {
+    const inputs = tr.querySelectorAll('input');
+    const item = inputs[0].value;
+    const qty = parseFloat(inputs[1].value);
+    const price = parseFloat(inputs[2].value);
+    const total = qty * price;
+    rows.push([item, qty, price, total]);
+  });
+  rows.push(["", "", "Subtotal", subtotalEl.textContent]);
+  rows.push(["", "", "Tax", taxEl.textContent]);
+  rows.push(["", "", "Grand Total", grandTotalEl.textContent]);
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  XLSX.utils.book_append_sheet(wb, ws, "Invoice");
+  XLSX.writeFile(wb, "InvoiceX.xlsx");
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
 }
 
 window.onload = loadData;
