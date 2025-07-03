@@ -2,15 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
-  <title>InvoiceX - Advanced Invoice Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InvoiceX - Pro Invoice Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <button class="btn toggle" onclick="toggleTheme()">🌗 Toggle Theme</button>
+
   <h1>InvoiceX</h1>
 
-  <div class="invoice">
+  <div class="invoice" id="invoiceContent">
     <table id="invoiceTable">
       <thead>
         <tr>
@@ -21,24 +23,32 @@
           <th>❌</th>
         </tr>
       </thead>
-      <tbody id="invoiceBody">
-      </tbody>
+      <tbody id="invoiceBody"></tbody>
     </table>
 
     <div class="totals">
+      GST Rate:
+      <input type="number" id="gstRate" value="18" min="0" max="100" style="width: 60px;" oninput="calculateInvoice()">%
+      <br>
       Subtotal: ₹<span id="subtotal">0.00</span><br>
-      Tax (18%): ₹<span id="tax">0.00</span><br>
+      Tax (GST): ₹<span id="tax">0.00</span><br>
       <strong>Grand Total: ₹<span id="grandTotal">0.00</span></strong>
     </div>
 
     <button class="btn" onclick="addRow()">➕ Add Item</button>
-    <button class="btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+    <button class="btn" onclick="downloadPDF()">⬇️ Download PDF</button>
+    <button class="btn" onclick="exportExcel()">📊 Export Excel</button>
+    <button class="btn" onclick="window.print()">🖨️ Print</button>
     <button class="btn" onclick="resetInvoice()">🗑️ Reset</button>
   </div>
 
   <footer class="footer">
     © 2025 sᴧɴᴅᴇᴇᴘ sʜᴧʀᴍᴧ ᴧʟʟ ʀɪɢʜᴛs ʀᴇsᴇʀᴠᴇᴅ
   </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <script src="script.js"></script>
 </body>
