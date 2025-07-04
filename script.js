@@ -77,14 +77,38 @@ function resetInvoice() {
 }
 
 function downloadPDF() {
-  const element = document.getElementById('invoiceContent');
-  html2pdf().set({
-    margin: 0.5,
-    filename: 'InvoiceX.pdf',
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-  }).from(element).save();
+  const invoice = document.getElementById('invoiceContent');
+
+  // Clone to prevent affecting UI
+  const clone = invoice.cloneNode(true);
+
+  // Replace inputs with text
+  clone.querySelectorAll('input').forEach(input => {
+    const span = document.createElement('span');
+    span.textContent = input.value;
+    input.parentNode.replaceChild(span, input);
+  });
+
+  // Hide buttons in PDF
+  clone.querySelectorAll('.btn').forEach(btn => btn.style.display = 'none');
+
+  const wrapper = document.createElement('div');
+  wrapper.style.position = 'fixed';
+  wrapper.style.top = '-9999px';
+  wrapper.appendChild(clone);
+  document.body.appendChild(wrapper);
+
+  setTimeout(() => {
+    html2pdf().set({
+      margin: 0.5,
+      filename: 'InvoiceX.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }).from(clone).save().then(() => {
+      document.body.removeChild(wrapper);
+    });
+  }, 300);
 }
 
 function exportExcel() {
